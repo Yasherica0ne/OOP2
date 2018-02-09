@@ -1,0 +1,10 @@
+E:\GitHub\OOP2\CalcForm\CalcForm\bin\Debug\CalcForm.exe.config
+E:\GitHub\OOP2\CalcForm\CalcForm\bin\Debug\CalcForm.exe
+E:\GitHub\OOP2\CalcForm\CalcForm\bin\Debug\CalcForm.pdb
+E:\GitHub\OOP2\CalcForm\CalcForm\obj\Debug\CalcForm.csprojResolveAssemblyReference.cache
+E:\GitHub\OOP2\CalcForm\CalcForm\obj\Debug\CalcForm.Form1.resources
+E:\GitHub\OOP2\CalcForm\CalcForm\obj\Debug\CalcForm.Properties.Resources.resources
+E:\GitHub\OOP2\CalcForm\CalcForm\obj\Debug\CalcForm.csproj.GenerateResource.Cache
+E:\GitHub\OOP2\CalcForm\CalcForm\obj\Debug\CalcForm.csproj.CoreCompileInputs.cache
+E:\GitHub\OOP2\CalcForm\CalcForm\obj\Debug\CalcForm.exe
+E:\GitHub\OOP2\CalcForm\CalcForm\obj\Debug\CalcForm.pdb

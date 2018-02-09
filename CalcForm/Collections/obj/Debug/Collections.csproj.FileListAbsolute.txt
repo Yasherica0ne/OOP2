@@ -1,0 +1,9 @@
+E:\GitHub\OOP2\CalcForm\Collections\bin\Debug\Collections.exe.config
+E:\GitHub\OOP2\CalcForm\Collections\bin\Debug\Collections.exe
+E:\GitHub\OOP2\CalcForm\Collections\bin\Debug\Collections.pdb
+E:\GitHub\OOP2\CalcForm\Collections\obj\Debug\Collections.Form1.resources
+E:\GitHub\OOP2\CalcForm\Collections\obj\Debug\Collections.Properties.Resources.resources
+E:\GitHub\OOP2\CalcForm\Collections\obj\Debug\Collections.csproj.GenerateResource.Cache
+E:\GitHub\OOP2\CalcForm\Collections\obj\Debug\Collections.csproj.CoreCompileInputs.cache
+E:\GitHub\OOP2\CalcForm\Collections\obj\Debug\Collections.exe
+E:\GitHub\OOP2\CalcForm\Collections\obj\Debug\Collections.pdb
