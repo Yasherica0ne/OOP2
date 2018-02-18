@@ -7,3 +7,4 @@ E:\GitHub\OOP2\CalcForm\Collections\obj\Debug\Collections.csproj.GenerateResourc
 E:\GitHub\OOP2\CalcForm\Collections\obj\Debug\Collections.csproj.CoreCompileInputs.cache
 E:\GitHub\OOP2\CalcForm\Collections\obj\Debug\Collections.exe
 E:\GitHub\OOP2\CalcForm\Collections\obj\Debug\Collections.pdb
+E:\GitHub\OOP2\CalcForm\Collections\obj\Debug\Collections.csprojResolveAssemblyReference.cache

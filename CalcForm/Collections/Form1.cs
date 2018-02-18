@@ -25,7 +25,7 @@ namespace Collections
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            textBox2.Text = collection.Sort(true);
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -53,7 +53,7 @@ namespace Collections
 
         private void button2_Click(object sender, EventArgs e)
         {
-
+            textBox2.Text = collection.Sort(false);
         }
     }
 }

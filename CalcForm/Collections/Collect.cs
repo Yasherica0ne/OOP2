@@ -31,14 +31,28 @@ namespace Collections
         {
             list = new int[size];
             Random rand = new Random();
-            for(int i = 0; i < size; i++)
+            for (int i = 0; i < size; i++)
             {
                 list[i] = rand.Next(size);
             }
         }
-        public void Sort()
+        private string SortH()
         {
-            Comparer<int> comparer = 
+            IEnumerable<int> result = list.OrderBy(n => n);
+            return Buffering(result);
+        }
+        private string SortL()
+        {
+            IEnumerable<int> result = list.OrderByDescending(n => n);
+            return Buffering(result);
+        }
+        delegate string Comparator();
+        public string Sort(bool tr)
+        {
+            Comparator getSort;
+            if (tr) getSort = SortH;
+            else getSort = SortL;
+            return getSort();
         }
     }
 }

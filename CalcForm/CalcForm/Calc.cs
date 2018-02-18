@@ -25,7 +25,15 @@ namespace CalcForm
             {
                 throw new Exception("Указано неверное значение сддвига");
             }
-            return str1.Remove((str1.Length - shift), shift);
+            char[] buff = str1.ToCharArray();
+            for (int i = 0; i < shift; i++)
+            {
+                string buf = str1;
+                for (int j = 0; j < str1.Length; j++)
+                {
+                    //
+                }
+            }
         }
         public static string rightSh(string str1, string str2)
         {

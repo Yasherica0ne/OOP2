@@ -62,6 +62,7 @@
             // 
             // button1
             // 
+            this.button1.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.button1.Location = new System.Drawing.Point(40, 68);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(143, 37);
@@ -193,7 +194,7 @@
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Int collection";
             this.ResumeLayout(false);
             this.PerformLayout();
 
