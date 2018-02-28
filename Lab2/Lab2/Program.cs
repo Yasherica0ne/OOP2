@@ -15,16 +15,15 @@ namespace Lab2
         [STAThread]
         static void Main()
         {
-            try
-            {
+                Application.ThreadException += Application_ThreadException;
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new Form1());
-            }
-            catch(Exception exc)
-            {
-                MessageBox.Show(exc.Message);
-            }
+        }
+
+        private static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
+        {
+            MessageBox.Show(e.Exception.Message, "Error");
         }
     }
 }
