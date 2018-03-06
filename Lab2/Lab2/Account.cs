@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 using System.Xml.Linq;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.ComponentModel.DataAnnotations;
 
 
 namespace Lab2
@@ -19,14 +20,13 @@ namespace Lab2
         [XmlIgnore]
         public static long count = 0;
         public static string mainFilePath = "accounts.xml";
-        public static string sortFilePath = "sort";
-        public static string searchFilePath = "search";
-        public static string extension = ".xml";
         [XmlElement(ElementName = "number")]
         public long number { get; set; }
         [XmlElement(ElementName = "depositeType")]
         public DepositeType dType { get; set; }
         [XmlElement(ElementName = "balance")]
+        [Required]
+        [Range(0, 10000)]
         public float balance { get; set; }
         [XmlElement(ElementName = "createDate")]
         public DateTime createDate { get; set; }
@@ -109,6 +109,17 @@ namespace Lab2
             return buffer.ToString();
         }
 
+        private static bool Matches(string str1, string str2)
+        {
+            string pattern1 = str2.Substring(0, 3);
+            string pattern2 = str2.Substring(str2.Length - 3, 3);
+            string pattern3 = str2.Substring((str2.Length / 2) - 1, 3);
+            if (Regex.IsMatch(str1, $"^{pattern1}") && Regex.IsMatch(str1, $"[{str2}]")) return true;
+            else if(Regex.IsMatch(str1, $"{pattern3}") && Regex.IsMatch(str1, $"[{str2}]")) return true;
+            else if (Regex.IsMatch(str1, $"{pattern2}$") && Regex.IsMatch(str1, $"[{str2}]")) return true;
+            else return false;
+        }
+
         public static string AccountsToString(IEnumerable<Account> accs)
         {
             StringBuilder buffer = new StringBuilder();
@@ -143,7 +154,9 @@ namespace Lab2
                             {
                                 string[] FIO = search1.Split(' ');
                                 items1 = from xe in xdoc.Element("ArrayOfAccount").Elements("account")
-                                         where (xe.Element("owner").Element("surname").Value.Equals(FIO[0]) && xe.Element("owner").Element("name").Value.Equals(FIO[1]) && xe.Element("owner").Element("midname").Value.Equals(FIO[2]))
+                                         //where ((xe.Element("owner").Element("surname").Value.Equals(FIO[0]) && xe.Element("owner").Element("name").Value.Equals(FIO[1]) && xe.Element("owner").Element("midname").Value.Equals(FIO[2]))
+                                         //||
+                                         where (Matches(xe.Element("owner").Element("surname").Value, FIO[0]) && Matches(xe.Element("owner").Element("name").Value, FIO[1]) && Matches(xe.Element("owner").Element("midname").Value, FIO[2]))
                                          select new Account(xe);
                                 break;
                             }
@@ -170,7 +183,7 @@ namespace Lab2
                         case 1:
                             {
                                 string[] FIO = search1.Split(' ');
-                                items1 = items1.Where(n => n.owner.surname.Equals(FIO[0]) && n.owner.name.Equals(FIO[1]) && n.owner.midname.Equals(FIO[2]));
+                                items1 = items1.Where(n => (n.owner.surname.Equals(FIO[0]) || Regex.Matches(n.owner.surname, FIO[0]).Count > 0) && (n.owner.name.Equals(FIO[1]) || Regex.Matches(n.owner.surname, FIO[0]).Count > 0) && (n.owner.midname.Equals(FIO[2]) || Regex.Matches(n.owner.surname, FIO[0]).Count > 0));
                                 break;
                             }
                         case 2: items1 = items1.Where(n => n.balance == float.Parse(search1)); break;
@@ -250,11 +263,19 @@ namespace Lab2
                 birthDate = _birthDate;
             }
             [XmlElement(ElementName = "surname")]
+            [Required(AllowEmptyStrings = false)]
+            [RegularExpression(@"\w*")]
             public string surname { get; set; }
             [XmlElement(ElementName = "name")]
+            [Required(AllowEmptyStrings = false)]
+            [RegularExpression(@"\w*")]
             public string name { get; set; }
             [XmlElement(ElementName = "midname")]
+            [Required(AllowEmptyStrings = false)]
+            [RegularExpression(@"\w*")]
             public string midname { get; set; }
+            [Required]
+            [RegularExpression(@"\d*")]
             [XmlElement(ElementName = "passNumber")]
             public long passNumber { get; set; }
             [XmlElement(ElementName = "birthDate")]

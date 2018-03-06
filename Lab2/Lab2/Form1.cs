@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 
 namespace Lab2
 {
@@ -24,6 +26,11 @@ namespace Lab2
                     listBox1.Items.Add(acc.number + " " + acc.owner.surname + " " + acc.owner.name + " " + acc.owner.midname + " " + acc.owner.passNumber + " " + acc.balance);
                     Account.count++;
                 }
+                toolStripStatusLabel4.Text = Account.count.ToString();
+                //toolStripStatusLabel6.Text = DateTime.Now.Date.ToShortDateString();
+                timer = new Timer() { Interval = 1000 };
+                timer.Tick += Timer1_Tick;
+                timer.Start();
             }
         }
 
@@ -31,20 +38,19 @@ namespace Lab2
         Account account;
         public int[] count;
         public List<string> search;
-        public IEnumerable<Account> buffer;
+        public List<Account> buffer = new List<Account>();
         public string fileName;
+        Timer timer;
 
         private void button1_Click(object sender, EventArgs e)
         {
+            stripStatus(sender);
             int dpType = 0;
             if (radioButton1.Checked) dpType = 0;
             else if (radioButton2.Checked) dpType = 1;
             else if (radioButton3.Checked) dpType = 2;
             else throw new Exception("Не выбран тип вклада");
-            if (textBox1.Text == "") throw new Exception("Поле фамилии пусто");
-            else if (textBox2.Text == "") throw new Exception("Поле имени пусто");
-            else if (textBox3.Text == "") throw new Exception("Поле отчества пусто");
-            else if (textBox5.Text == "") throw new Exception("Поле номера паспорта пусто");
+            if (textBox5.Text == "") throw new Exception("Поле номера паспорта пусто");
             else if (monthCalendar1.SelectionRange.Start.Date == monthCalendar1.TodayDate)
                 throw new Exception("Дата рождения не выбрана");
             else if ((new DateTime().AddTicks(DateTime.Now.Ticks - monthCalendar1.SelectionRange.Start.Date.Ticks)).Year < 19)
@@ -52,6 +58,24 @@ namespace Lab2
             else if (comboBox1.Text == "") throw new Exception("Поле с суммой вклада пусто");
             account = new Account(textBox2.Text, textBox3.Text, textBox1.Text, long.Parse(textBox5.Text), monthCalendar1.SelectionRange.Start.Date, dpType, float.Parse(comboBox1.Text), checkBox1.Checked, checkBox2.Checked, float.Parse(comboBox1.Text), Account.OperationType.deposit);
             //account = new Account();
+            ValidationContext valCont = new ValidationContext(account);
+            List<ValidationResult> results = new List<ValidationResult>();
+            if (!Validator.TryValidateObject(account, valCont, results, true))
+            {
+                foreach (var error in results)
+                {
+                    throw new Exception(error.ErrorMessage);
+                }
+            }
+            valCont = new ValidationContext(account.owner);
+            results = new List<ValidationResult>();
+            if (!Validator.TryValidateObject(account.owner, valCont, results, true))
+            {
+                foreach (var error in results)
+                {
+                    throw new Exception(error.ErrorMessage);
+                }
+            }
             Account.count++;
             accounts.Add(account);
             //listBox1.Items.Add("0 Makarov Victor Alekseevich");
@@ -72,12 +96,15 @@ namespace Lab2
 
         private void button2_Click(object sender, EventArgs e)
         {
+            CheckList();
             if (textBox4.Text == "") throw new Exception("Поле номера пасспорта пусто");
             textBox6.Text = Account.AccountHistory(long.Parse(textBox4.Text));
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
+            stripStatus(sender);
+            CheckList();
             var controls = groupBox2.Controls;
             int sortType = 0;
             foreach (RadioButton rb in controls)
@@ -86,35 +113,62 @@ namespace Lab2
                 if (rb.Checked) break;
             }
             if (sortType == 0) throw new Exception("Не выбран тип сортировки");
-            else buffer = Account.Sort(sortType);
+            else buffer.AddRange(Account.Sort(sortType));
             textBox6.Text = Account.AccountsToString(buffer);
+
         }
 
         public void Save(string name)
         {
-            if (buffer == null) throw new Exception("Буфер пуст");
-            if (buffer.Count() > 0)
-            {
+            if (buffer.Count == 0) throw new Exception("Буфер пуст");
+            else
+            { 
                 List<Account> buf = new List<Account>();
                 buf.AddRange(buffer);
                 XmlSerializeWrapper.Serialize<List<Account>>(buf, name + ".xml");
                 MessageBox.Show("Результат сохранён", "window");
             }
-            else throw new Exception("Буфер пуст");
-
         }
-        private void button6_Click(object sender, EventArgs e)
+        public void button6_Click(object sender, EventArgs e)
         {
             Form2 f2 = new Form2(this);
             f2.Show();
+        }
+
+        public void CheckList()
+        {
+            if (Account.count == 0) throw new Exception("Список пуст");
+        }
+
+        private void stripStatus(object sender)
+        {
+            if (sender is ToolStripMenuItem)
+            {
+                toolStripStatusLabel1.Text = "Поиск";
+                return;
+            }
+
+            switch (((Button)sender).Name)
+            {
+                case "button1":
+                    {
+                        toolStripStatusLabel1.Text = "Создание вклада";
+                        toolStripStatusLabel4.Text = Account.count.ToString();
+                        break;
+                    }
+                case "button5": toolStripStatusLabel1.Text = "Сортировка"; break;
+            }
         }
         public void changeResult(string result)
         {
             textBox6.Text = result;
         }
 
-        private void поискToolStripMenuItem1_Click(object sender, EventArgs e)
+
+
+        public void поискToolStripMenuItem1_Click(object sender, EventArgs e)
         {
+            stripStatus(sender);
             Search search = new Search(this);
             search.Show();
         }
@@ -130,6 +184,7 @@ namespace Lab2
             tb.Location = point;
         }
         ToolBar tb = new ToolBar();
+
         private void инструментыToolStripMenuItem_Click(object sender, EventArgs e)
         {
             tb = new ToolBar(this);
@@ -139,5 +194,20 @@ namespace Lab2
             tb.Show();
         }
 
+        public void ClearList()
+        {
+            accounts.Clear();
+            listBox1.Items.Clear();
+            buffer.Clear();
+            Account.count = 0;
+            toolStripStatusLabel4.Text = "0";
+            toolStripStatusLabel2.Text = "Очистка";
+            return;
+        }
+
+        private void Timer1_Tick(Object sender, EventArgs e)
+        {
+            toolStripStatusLabel6.Text = DateTime.Now.ToString();
+        }
     }
 }

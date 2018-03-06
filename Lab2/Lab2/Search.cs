@@ -21,6 +21,7 @@ namespace Lab2
         private void button4_Click(object sender, EventArgs e)
         {
             Form1 fm1 = (Form1)this.Owner;
+            fm1.CheckList();
             var controls = groupBox3.Controls;
             int sortType = 0;
             int index = 0;
@@ -52,7 +53,7 @@ namespace Lab2
                 }
 
             }
-            fm1.buffer = Account.Search(fm1.search, fm1.count);
+            fm1.buffer.AddRange(Account.Search(fm1.search, fm1.count));
             fm1.changeResult(Account.AccountsToString(fm1.buffer));
             listBox2.ClearSelected();
         }
