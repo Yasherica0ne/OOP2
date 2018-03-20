@@ -39,7 +39,7 @@ namespace Lab2
 
         private void button3_Click(object sender, EventArgs e)
         {
-            ((Form1)this.Owner).changeResult("");
+            ((Form1)this.Owner).ClearFields();
         }
     }
 }

@@ -1,0 +1,88 @@
+﻿<Window x:Class="Lab4.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Lab4"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Name="window" Icon="icons/icon.ico"  
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen" AllowDrop="True" MinWidth="475" MinHeight="350"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="453*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <RichTextBox x:Name="Main" Margin="10,35,10,24" AllowDrop="True" Drop="Main_Drop" TextChanged="Main_TextChanged" Grid.ColumnSpan="2" RenderTransformOrigin="0.5,0.5" >
+            <RichTextBox.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform AngleX="-0.218"/>
+                    <RotateTransform/>
+                    <TranslateTransform X="-0.496"/>
+                </TransformGroup>
+            </RichTextBox.RenderTransform>
+        </RichTextBox>
+        <ToolBar  Height="30" VerticalAlignment="Top" Grid.ColumnSpan="2">
+            <Button x:Name="File" Click="File_Click" Content="{DynamicResource m_File}" />
+            <Button x:Name="Save" Click="Save_Click" Content="{DynamicResource m_Save}" />
+            <Separator Width="3"/>
+            <ToggleButton x:Name="BoldSt" Checked="BoldSt_Checked" Unchecked="BoldSt_Unchecked">
+                <Image Source="icons/B.png" Stretch="Fill"/>
+            </ToggleButton>
+            <ToggleButton x:Name="ItalicSt"  Checked="ItalicSt_Checked" Unchecked="ItalicSt_Unchecked">
+                <Image Source="icons/I.png" Stretch="Fill"/>
+            </ToggleButton>
+            <ToggleButton x:Name="UnderlineSt" Checked="UnderlineSt_Checked" Unchecked="UnderlineSt_Unchecked">
+                <Image Source="icons/U.png" Stretch="Fill"/>
+            </ToggleButton>
+            <Separator Width="3" />
+            <ComboBox x:Name="fontNameComBox" Margin="4,0,0,0" VerticalAlignment="Center" Width="120" SelectedIndex="0" MinHeight="32" HorizontalAlignment="Center" ItemsSource="{Binding Source={x:Static Fonts.SystemFontFamilies}}" SelectionChanged="fontNameComBox_SelectionChanged" />
+            <ComboBox x:Name="fontSizeComBox" Margin="4,0,0,0" VerticalAlignment="Center" Width="80" SelectedIndex="2" MinHeight="32" SelectionChanged="fontSizeComBox_SelectionChanged">
+                <System:Double>6</System:Double>
+                <System:Double>7</System:Double>
+                <System:Double>8</System:Double>
+                <System:Double>9</System:Double>
+                <System:Double>10</System:Double>
+                <System:Double>11</System:Double>
+                <System:Double>12</System:Double>
+                <System:Double>14</System:Double>
+                <System:Double>16</System:Double>
+                <System:Double>18</System:Double>
+                <System:Double>20</System:Double>
+                <System:Double>22</System:Double>
+                <System:Double>24</System:Double>
+                <System:Double>36</System:Double>
+                <System:Double>48</System:Double>
+                <System:Double>72</System:Double>
+            </ComboBox>
+            <ComboBox x:Name="fontColorComBox" Margin="0,-4,0,-3" VerticalAlignment="Center" Width="49" SelectedIndex="0" MinHeight="32" SelectionChanged="fontColorComBox_SelectionChanged">
+                <ComboBoxItem>
+                    <Image x:Name="Black" Source="icons\BlackCol.png" Stretch="Fill"/>
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    <Image x:Name="Green" Source="icons\GreenCol.png" Stretch="Fill"/>
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    <Image x:Name="Yellow" Source="icons\YellowCol.png" Stretch="Fill"/>
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    <Image x:Name="Red" Source="icons\RedCol.png" Stretch="Fill"/>
+                </ComboBoxItem>
+                <ComboBoxItem >
+                    <Image Source="icons\BlueCol.png" Stretch="Fill"/>
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    <Image x:Name="Brown" Source="icons\BrownCol.png" Stretch="Fill"/>
+                </ComboBoxItem>
+            </ComboBox>
+        </ToolBar>
+        <StatusBar Margin="10,0,150,3" Height="20" VerticalAlignment="Bottom">
+            <TextBlock><Run Text="{DynamicResource m_Count}"/></TextBlock>
+            <TextBlock x:Name="Count"><Run Text="0"/></TextBlock>
+        </StatusBar>
+        <ComboBox x:Name="menuLanguage" SelectedIndex="0" Margin="0,0,10,0" Height="24" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="140">
+        </ComboBox>
+    </Grid>
+</Window>

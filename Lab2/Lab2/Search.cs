@@ -53,6 +53,7 @@ namespace Lab2
                 }
 
             }
+            fm1.buffer.Clear();
             fm1.buffer.AddRange(Account.Search(fm1.search, fm1.count));
             fm1.changeResult(Account.AccountsToString(fm1.buffer));
             listBox2.ClearSelected();

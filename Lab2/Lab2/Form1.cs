@@ -26,6 +26,10 @@ namespace Lab2
                     listBox1.Items.Add(acc.number + " " + acc.owner.surname + " " + acc.owner.name + " " + acc.owner.midname + " " + acc.owner.passNumber + " " + acc.balance);
                     Account.count++;
                 }
+                tb = new ToolBar(this);
+                Point point = new Point(this.Location.X + this.Width - 15, this.Location.Y);
+                tb.Location = point;
+                tb.LocationChanged += new System.EventHandler(Locate);
                 toolStripStatusLabel4.Text = Account.count.ToString();
                 //toolStripStatusLabel6.Text = DateTime.Now.Date.ToShortDateString();
                 timer = new Timer() { Interval = 1000 };
@@ -44,7 +48,6 @@ namespace Lab2
 
         private void button1_Click(object sender, EventArgs e)
         {
-            stripStatus(sender);
             int dpType = 0;
             if (radioButton1.Checked) dpType = 0;
             else if (radioButton2.Checked) dpType = 1;
@@ -56,7 +59,11 @@ namespace Lab2
             else if ((new DateTime().AddTicks(DateTime.Now.Ticks - monthCalendar1.SelectionRange.Start.Date.Ticks)).Year < 19)
                 throw new Exception("Вам должно быть больше восемнадцати лет");
             else if (comboBox1.Text == "") throw new Exception("Поле с суммой вклада пусто");
-            account = new Account(textBox2.Text, textBox3.Text, textBox1.Text, long.Parse(textBox5.Text), monthCalendar1.SelectionRange.Start.Date, dpType, float.Parse(comboBox1.Text), checkBox1.Checked, checkBox2.Checked, float.Parse(comboBox1.Text), Account.OperationType.deposit);
+            long passNum = -1;
+            long.TryParse(textBox5.Text, out passNum);
+            float balance = -1;
+            float.TryParse(comboBox1.Text, out balance);
+            account = new Account(textBox2.Text, textBox3.Text, textBox1.Text, passNum, monthCalendar1.SelectionRange.Start.Date, dpType, balance, checkBox1.Checked, checkBox2.Checked, Account.OperationType.deposit);
             //account = new Account();
             ValidationContext valCont = new ValidationContext(account);
             List<ValidationResult> results = new List<ValidationResult>();
@@ -77,6 +84,7 @@ namespace Lab2
                 }
             }
             Account.count++;
+            stripStatus(sender);
             accounts.Add(account);
             //listBox1.Items.Add("0 Makarov Victor Alekseevich");
             listBox1.Items.Add(account.number + " " + textBox1.Text + " " + textBox2.Text + " " + textBox3.Text + " " + account.owner.passNumber + " " + account.balance);
@@ -112,6 +120,7 @@ namespace Lab2
                 sortType++;
                 if (rb.Checked) break;
             }
+            buffer.Clear();
             if (sortType == 0) throw new Exception("Не выбран тип сортировки");
             else buffer.AddRange(Account.Sort(sortType));
             textBox6.Text = Account.AccountsToString(buffer);
@@ -163,8 +172,20 @@ namespace Lab2
         {
             textBox6.Text = result;
         }
-
-
+        
+        public void ClearFields()
+        {
+            textBox1.Text = "";
+            textBox2.Text = "";
+            textBox3.Text = "";
+            textBox4.Text = "";
+            textBox5.Text = "";
+            textBox6.Text = "";
+            monthCalendar1.SelectionRange.Start = DateTime.Now;
+            comboBox1.Text = "";
+            checkBox1.Checked = false;
+            checkBox2.Checked = false;
+        }
 
         public void поискToolStripMenuItem1_Click(object sender, EventArgs e)
         {
@@ -175,7 +196,7 @@ namespace Lab2
 
         private void оПрограммеToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Версия: 0.2\nАвтор: Макаров Виктор Алексеевич", "Lab3");
+            MessageBox.Show("Версия: 0.3\nАвтор: Макаров Виктор Алексеевич", "Lab3");
         }
 
         public void Locate(object sender, EventArgs e)
@@ -184,15 +205,6 @@ namespace Lab2
             tb.Location = point;
         }
         ToolBar tb = new ToolBar();
-
-        private void инструментыToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            tb = new ToolBar(this);
-            Point point = new Point(this.Location.X + this.Width - 15, this.Location.Y);
-            tb.Location = point;
-            tb.LocationChanged += new System.EventHandler(Locate);
-            tb.Show();
-        }
 
         public void ClearList()
         {
@@ -208,6 +220,16 @@ namespace Lab2
         private void Timer1_Tick(Object sender, EventArgs e)
         {
             toolStripStatusLabel6.Text = DateTime.Now.ToString();
+        }
+
+        private void открытьПанельИнструментовToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tb.Show();
+        }
+
+        private void закрытьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tb.Visible = false;
         }
     }
 }

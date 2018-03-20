@@ -78,7 +78,7 @@ namespace Lab2
             number = long.Parse(xe.Element("number").Value);
             createDate = DateTime.Parse(xe.Element("createDate").Value);
         }
-        public Account(string _name, string _midname, string _surname, long _passNumber, DateTime _birthDate, int _dType, float _balance, bool _smsNotify, bool _banking, float sum, OperationType opType)
+        public Account(string _name, string _midname, string _surname, long _passNumber, DateTime _birthDate, int _dType, float _balance, bool _smsNotify, bool _banking, OperationType opType)
         {
             owner = new Owner(_name, _midname, _surname, _passNumber, _birthDate);
             number = count;
@@ -87,7 +87,7 @@ namespace Lab2
             createDate = DateTime.Now;
             smsNotify = _smsNotify;
             banking = _banking;
-            history = new History(sum, opType);
+            history = new History(_balance, opType);
         }
 
         public static string AccountHistory(long passNumber)
@@ -183,7 +183,7 @@ namespace Lab2
                         case 1:
                             {
                                 string[] FIO = search1.Split(' ');
-                                items1 = items1.Where(n => (n.owner.surname.Equals(FIO[0]) || Regex.Matches(n.owner.surname, FIO[0]).Count > 0) && (n.owner.name.Equals(FIO[1]) || Regex.Matches(n.owner.surname, FIO[0]).Count > 0) && (n.owner.midname.Equals(FIO[2]) || Regex.Matches(n.owner.surname, FIO[0]).Count > 0));
+                                items1 = items1.Where(n => (Matches(n.owner.surname, FIO[0]) && Matches(n.owner.name, FIO[1]) && Matches(n.owner.midname, FIO[2])));
                                 break;
                             }
                         case 2: items1 = items1.Where(n => n.balance == float.Parse(search1)); break;
@@ -264,18 +264,18 @@ namespace Lab2
             }
             [XmlElement(ElementName = "surname")]
             [Required(AllowEmptyStrings = false)]
-            [RegularExpression(@"\w*")]
+            [RegularExpression(@"[a-zA-Z]+")]
             public string surname { get; set; }
             [XmlElement(ElementName = "name")]
             [Required(AllowEmptyStrings = false)]
-            [RegularExpression(@"\w*")]
+            [RegularExpression(@"[a-zA-Z]+")]
             public string name { get; set; }
             [XmlElement(ElementName = "midname")]
             [Required(AllowEmptyStrings = false)]
-            [RegularExpression(@"\w*")]
+            [RegularExpression(@"[a-zA-Z]+")]
             public string midname { get; set; }
             [Required]
-            [RegularExpression(@"\d*")]
+            [Range(0, 10000000000)]
             [XmlElement(ElementName = "passNumber")]
             public long passNumber { get; set; }
             [XmlElement(ElementName = "birthDate")]
@@ -298,7 +298,7 @@ namespace Lab2
         public static void Serialize<T>(T obj, string fileName)
         {
             XmlSerializer formatter = new XmlSerializer(typeof(T));
-            using (FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate))
+            using (FileStream fs = new FileStream(fileName, FileMode.Truncate))
             {
                 formatter.Serialize(fs, obj);
             }
@@ -320,8 +320,8 @@ namespace Lab2
             {
                 count = fs.Length;
             }
-            if (count == 0) return true;
-            else return false; ;
+            if (count < 30) return true;
+            else return false; 
         }
     }
 }
