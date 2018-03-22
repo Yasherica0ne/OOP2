@@ -5,8 +5,12 @@
     <v:String x:Key="m_File">Файл</v:String>
     <v:String x:Key="m_Save">Сохранить</v:String>
     <v:String x:Key="m_Edit">Редактировать</v:String>
+    <v:String x:Key="m_Open">Открыть</v:String>
+    <v:String x:Key="m_Exit">Выйти</v:String>
     <v:String x:Key="m_Copy">Копировать</v:String>
     <v:String x:Key="m_Paste">Вставить</v:String>
+    <v:String x:Key="m_Cut">Вырезать</v:String>
+    <v:String x:Key="m_Delete">Удалить</v:String>
     <v:String x:Key="m_New">Создать</v:String>
     <v:String x:Key="m_Count">Количество символов: </v:String>
 </ResourceDictionary>

@@ -139,5 +139,8 @@
     <Resource Include="icons\RedCol.png" />
     <Resource Include="icons\YellowCol.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\inits.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

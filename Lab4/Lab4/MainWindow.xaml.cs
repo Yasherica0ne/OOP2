@@ -5,16 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Microsoft.Win32;
 using System.IO;
 using System.Globalization;
+
 
 namespace Lab4
 {
@@ -42,6 +38,8 @@ namespace Lab4
             }
         }
 
+        //static TextSelection rbBuffer;
+
         private void LanguageChanged(Object sender, EventArgs e)
         {
             CultureInfo currLang = App.Language;
@@ -59,7 +57,7 @@ namespace Lab4
             if (mi != null)
             {
                 ComboBoxItem cmbItem = mi.SelectedItem as ComboBoxItem;
-                CultureInfo lang =  cmbItem.Tag as CultureInfo;
+                CultureInfo lang = cmbItem.Tag as CultureInfo;
                 if (lang != null)
                 {
                     App.Language = lang;
@@ -73,23 +71,23 @@ namespace Lab4
 
         private void fontNameComBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!Main.Selection.IsEmpty)
+            if (!richTextBox.Selection.IsEmpty)
             {
-                Main.Selection.ApplyPropertyValue(Inline.FontFamilyProperty, (FontFamily)fontNameComBox.SelectedItem);
+                richTextBox.Selection.ApplyPropertyValue(Inline.FontFamilyProperty, (FontFamily)fontNameComBox.SelectedItem);
             }
         }
 
         private void fontSizeComBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!Main.Selection.IsEmpty)
+            if (!richTextBox.Selection.IsEmpty)
             {
-                Main.Selection.ApplyPropertyValue(Inline.FontSizeProperty, fontSizeComBox.SelectedItem);
+                richTextBox.Selection.ApplyPropertyValue(Inline.FontSizeProperty, fontSizeComBox.SelectedItem);
             }
         }
 
         private void fontColorComBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!Main.Selection.IsEmpty)
+            if (!richTextBox.Selection.IsEmpty)
             {
                 Brush brush = null;
                 switch (fontColorComBox.SelectedIndex)
@@ -101,55 +99,55 @@ namespace Lab4
                     case 4: brush = Brushes.Blue; break;
                     case 5: brush = Brushes.Brown; break;
                 }
-                Main.Selection.ApplyPropertyValue(Inline.ForegroundProperty, brush);
+                richTextBox.Selection.ApplyPropertyValue(Inline.ForegroundProperty, brush);
             }
         }
 
         private void BoldSt_Checked(object sender, RoutedEventArgs e)
         {
-            if (!Main.Selection.IsEmpty)
+            if (!richTextBox.Selection.IsEmpty)
             {
-                Main.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Bold);
+                richTextBox.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Bold);
             }
         }
 
         private void ItalicSt_Checked(object sender, RoutedEventArgs e)
         {
-            if (!Main.Selection.IsEmpty)
+            if (!richTextBox.Selection.IsEmpty)
             {
-                Main.Selection.ApplyPropertyValue(Inline.FontStyleProperty, FontStyles.Italic);
+                richTextBox.Selection.ApplyPropertyValue(Inline.FontStyleProperty, FontStyles.Italic);
             }
         }
 
         private void UnderlineSt_Checked(object sender, RoutedEventArgs e)
         {
-            if (!Main.Selection.IsEmpty)
+            if (!richTextBox.Selection.IsEmpty)
             {
-                Main.Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, TextDecorations.Underline);
+                richTextBox.Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, TextDecorations.Underline);
             }
         }
 
         private void BoldSt_Unchecked(object sender, RoutedEventArgs e)
         {
-            if (!Main.Selection.IsEmpty)
+            if (!richTextBox.Selection.IsEmpty)
             {
-                Main.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Normal);
+                richTextBox.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Normal);
             }
         }
 
         private void ItalicSt_Unchecked(object sender, RoutedEventArgs e)
         {
-            if (!Main.Selection.IsEmpty)
+            if (!richTextBox.Selection.IsEmpty)
             {
-                Main.Selection.ApplyPropertyValue(Inline.FontStyleProperty, FontStyles.Normal);
+                richTextBox.Selection.ApplyPropertyValue(Inline.FontStyleProperty, FontStyles.Normal);
             }
         }
 
         private void UnderlineSt_Unchecked(object sender, RoutedEventArgs e)
         {
-            if (!Main.Selection.IsEmpty)
+            if (!richTextBox.Selection.IsEmpty)
             {
-                Main.Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, null);
+                richTextBox.Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, null);
             }
         }
 
@@ -161,8 +159,8 @@ namespace Lab4
             {
                 window.Title = dlg.FileName;
                 fileStream = new FileStream(dlg.FileName, FileMode.Open);
-                TextRange range = new TextRange(Main.Document.ContentStart,
-                    Main.Document.ContentEnd);
+                TextRange range = new TextRange(richTextBox.Document.ContentStart,
+                    richTextBox.Document.ContentEnd);
                 range.Load(fileStream, DataFormats.Rtf);
                 fileStream.Close();
             }
@@ -175,32 +173,81 @@ namespace Lab4
             if (dlg.ShowDialog() == true)
             {
                 fileStream = new FileStream(dlg.FileName, FileMode.Create);
-                TextRange range = new TextRange(Main.Document.ContentStart,
-                    Main.Document.ContentEnd);
+                TextRange range = new TextRange(richTextBox.Document.ContentStart,
+                    richTextBox.Document.ContentEnd);
                 range.Save(fileStream, DataFormats.Rtf);
                 fileStream.Close();
             }
         }
 
-        private void Main_TextChanged(object sender, TextChangedEventArgs e)
+        void richTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            string richText = new TextRange(Main.Document.ContentStart,
-               Main.Document.ContentEnd).Text;
+            string richText = new TextRange(richTextBox.Document.ContentStart,
+               richTextBox.Document.ContentEnd).Text;
             Count.Text = Convert.ToString(richText.Length);
         }
 
-        private void Main_Drop(object sender, DragEventArgs e)
+        private void richTextBox_Drop(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
                 window.Title = files[0];
                 fileStream = new FileStream(files[0], FileMode.Open);
-                TextRange range = new TextRange(Main.Document.ContentStart,
-                    Main.Document.ContentEnd);
+                TextRange range = new TextRange(richTextBox.Document.ContentStart,
+                    richTextBox.Document.ContentEnd);
                 range.Load(fileStream, DataFormats.Rtf);
                 fileStream.Close();
             }
         }
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        static int windowCount = 1;
+
+        private void New_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow richTextBoxWindow = new  MainWindow();
+            richTextBoxWindow.Title = "Window" + windowCount++;
+            richTextBoxWindow.Show();
+        }
+
+        private void Cut_Click(object sender, RoutedEventArgs e)
+        {
+            if (!richTextBox.Selection.IsEmpty)
+            {
+                richTextBox.Cut();
+            }
+        }
+
+        private void Copy_Click(object sender, RoutedEventArgs e)
+        {
+            if (!richTextBox.Selection.IsEmpty)
+            {
+                richTextBox.Copy();
+            }
+        }
+
+        private void Paste_Click(object sender, RoutedEventArgs e)
+        {
+            richTextBox.Paste();
+        }
+
+        private void Delete_Click(object sender, RoutedEventArgs e)
+        {
+            if (!richTextBox.Selection.IsEmpty)
+            {
+                richTextBox.Selection.Text = "";
+            }
+        }
+
+        //private void ContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        //{
+        //    if (richTextBox) Paste.Visibility = Visibility.Visible;
+        //    else Paste.Visibility = Visibility.Collapsed;
+        //}
     }
 }

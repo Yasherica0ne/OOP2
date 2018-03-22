@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml-stylesheet type=«text/xsl» href=«style.xslt»?>
+<employees>
+    <employee>
+        <age>23</age>
+        <male>true</male>
+        <name>IvanIngeneer</name>
+        <qualification>junior</qualification>
+        <salary>300</salary>
+    </employee>
+    <employee>
+        <age>24</age>
+        <male>true</male>
+        <name>IvanSysAdmon</name>
+        <qualification>senior</qualification>
+        <salary>250</salary>
+    </employee>
+</employees>

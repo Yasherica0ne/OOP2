@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lab4"
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Name="window" Icon="icons/icon.ico"  
-        mc:Ignorable="d" WindowStartupLocation="CenterScreen" AllowDrop="True" MinWidth="475" MinHeight="350"
-        Title="MainWindow" Height="350" Width="525">
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen" AllowDrop="True" MinWidth="490" MinHeight="350"
+        Title="MainWindow" Height="350" Width="500">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="453*"/>
@@ -14,18 +14,25 @@
         <Grid.RowDefinitions>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <RichTextBox x:Name="Main" Margin="10,35,10,24" AllowDrop="True" Drop="Main_Drop" TextChanged="Main_TextChanged" Grid.ColumnSpan="2" RenderTransformOrigin="0.5,0.5" >
-            <RichTextBox.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform AngleX="-0.218"/>
-                    <RotateTransform/>
-                    <TranslateTransform X="-0.496"/>
-                </TransformGroup>
-            </RichTextBox.RenderTransform>
+        <RichTextBox x:Name="richTextBox" Margin="10,35,10,24" AllowDrop="True" Drop="richTextBox_Drop" TextChanged="richTextBox_TextChanged" Grid.ColumnSpan="2" >
+            <RichTextBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Name="Cut" Header="{DynamicResource m_Cut}" Click="Cut_Click"></MenuItem>
+                    <MenuItem Name="Copy" Header="{DynamicResource m_Copy}" Click="Copy_Click"></MenuItem>
+                    <MenuItem Name="Paste" Header="{DynamicResource m_Paste}" Click="Paste_Click"></MenuItem>
+                    <MenuItem Name="Delete" Header="{DynamicResource m_Delete}" Click="Delete_Click"></MenuItem>
+                </ContextMenu>
+            </RichTextBox.ContextMenu>
         </RichTextBox>
-        <ToolBar  Height="30" VerticalAlignment="Top" Grid.ColumnSpan="2">
-            <Button x:Name="File" Click="File_Click" Content="{DynamicResource m_File}" />
+        <Menu  Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="45">
+            <MenuItem Header="{DynamicResource m_File}" Height="25" Width="45" Margin="0, 2, 0, 0">
+                <MenuItem Name="New" Header="{DynamicResource m_New}" Click="New_Click"/>
+                <MenuItem Header="{DynamicResource m_Open}" Click="File_Click"/>
+                <Separator />
+                <MenuItem x:Name="Exit" Header="{DynamicResource m_Exit}" Click="Exit_Click"/>
+            </MenuItem>
+        </Menu>
+        <ToolBar  Height="30" VerticalAlignment="Top" Margin="45,0,0,0">
             <Button x:Name="Save" Click="Save_Click" Content="{DynamicResource m_Save}" />
             <Separator Width="3"/>
             <ToggleButton x:Name="BoldSt" Checked="BoldSt_Checked" Unchecked="BoldSt_Unchecked">
@@ -39,7 +46,7 @@
             </ToggleButton>
             <Separator Width="3" />
             <ComboBox x:Name="fontNameComBox" Margin="4,0,0,0" VerticalAlignment="Center" Width="120" SelectedIndex="0" MinHeight="32" HorizontalAlignment="Center" ItemsSource="{Binding Source={x:Static Fonts.SystemFontFamilies}}" SelectionChanged="fontNameComBox_SelectionChanged" />
-            <ComboBox x:Name="fontSizeComBox" Margin="4,0,0,0" VerticalAlignment="Center" Width="80" SelectedIndex="2" MinHeight="32" SelectionChanged="fontSizeComBox_SelectionChanged">
+            <ComboBox x:Name="fontSizeComBox" Margin="0,-4,0,-3" VerticalAlignment="Center" Width="80" SelectedIndex="2" MinHeight="32" SelectionChanged="fontSizeComBox_SelectionChanged">
                 <System:Double>6</System:Double>
                 <System:Double>7</System:Double>
                 <System:Double>8</System:Double>

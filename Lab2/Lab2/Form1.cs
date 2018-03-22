@@ -23,7 +23,7 @@ namespace Lab2
                 accounts.AddRange(XmlSerializeWrapper.Deserialize<List<Account>>(Account.mainFilePath));
                 foreach (Account acc in accounts)
                 {
-                    listBox1.Items.Add(acc.number + " " + acc.owner.surname + " " + acc.owner.name + " " + acc.owner.midname + " " + acc.owner.passNumber + " " + acc.balance);
+                    listBox1.Items.Add(acc.Number + " " + acc.Owner1.Surname + " " + acc.Owner1.Name + " " + acc.Owner1.Midname + " " + acc.Owner1.PassNumber + " " + acc.Balance);
                     Account.count++;
                 }
                 tb = new ToolBar(this);
@@ -74,9 +74,9 @@ namespace Lab2
                     throw new Exception(error.ErrorMessage);
                 }
             }
-            valCont = new ValidationContext(account.owner);
+            valCont = new ValidationContext(account.Owner1);
             results = new List<ValidationResult>();
-            if (!Validator.TryValidateObject(account.owner, valCont, results, true))
+            if (!Validator.TryValidateObject(account.Owner1, valCont, results, true))
             {
                 foreach (var error in results)
                 {
@@ -87,7 +87,7 @@ namespace Lab2
             stripStatus(sender);
             accounts.Add(account);
             //listBox1.Items.Add("0 Makarov Victor Alekseevich");
-            listBox1.Items.Add(account.number + " " + textBox1.Text + " " + textBox2.Text + " " + textBox3.Text + " " + account.owner.passNumber + " " + account.balance);
+            listBox1.Items.Add(account.Number + " " + textBox1.Text + " " + textBox2.Text + " " + textBox3.Text + " " + account.Owner1.PassNumber + " " + account.Balance);
             //var convertedjson = JsonConvert.SerializeObject(accounts, Formatting.Indented);
             XmlSerializeWrapper.Serialize(accounts, Account.mainFilePath);
             //accounts = XmlSerializeWrapper.Deserialize<List<Account>>("users.xml");
@@ -105,7 +105,7 @@ namespace Lab2
         private void button2_Click(object sender, EventArgs e)
         {
             CheckList();
-            if (textBox4.Text == "") throw new Exception("Поле номера пасспорта пусто");
+            if (textBox4.Text == "" || Regex.IsMatch(textBox4.Text, "[^0-9]+")) throw new Exception("Поле номера пасспорта заполнено неверно");
             textBox6.Text = Account.AccountHistory(long.Parse(textBox4.Text));
         }
 

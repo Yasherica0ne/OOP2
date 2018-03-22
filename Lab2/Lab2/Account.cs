@@ -20,90 +20,99 @@ namespace Lab2
         [XmlIgnore]
         public static long count = 0;
         public static string mainFilePath = "accounts.xml";
-        [XmlElement(ElementName = "number")]
-        public long number { get; set; }
-        [XmlElement(ElementName = "depositeType")]
-        public DepositeType dType { get; set; }
-        [XmlElement(ElementName = "balance")]
+        private long number;
+        private DepositeType dType;
         [Required]
         [Range(0, 10000)]
-        public float balance { get; set; }
+        private float balance;
+        private DateTime createDate;
+        private bool smsNotify;
+        private bool banking;
+        private Owner owner1;
+        private History history1;
+        [XmlElement(ElementName = "number")]
+        public long Number { get => number; set => number = value; }
+        [XmlElement(ElementName = "depositeType")]
+        public DepositeType DType { get => dType; set => dType = value; }
+        [XmlElement(ElementName = "balance")]
+        public float Balance { get => balance; set => balance = value; }
         [XmlElement(ElementName = "createDate")]
-        public DateTime createDate { get; set; }
+        public DateTime CreateDate { get => createDate; set => createDate = value; }
         [XmlElement(ElementName = "smsNotify")]
-        public bool smsNotify { get; set; }
+        public bool SmsNotify { get => smsNotify; set => smsNotify = value; }
         [XmlElement(ElementName = "banking")]
-        public bool banking { get; set; }
+        public bool Banking { get => banking; set => banking = value; }
         [XmlElement(ElementName = "owner")]
-        public Owner owner { get; set; }
+        public Owner Owner1 { get => owner1; set => owner1 = value; }
         [XmlElement(ElementName = "history")]
-        public History history { get; set; }
+        public History History1 { get => history1; set => history1 = value; }
 
         public override string ToString()
         {
             string deposite = "";
-            switch(this.dType)
+            switch(this.DType)
             {
                 case DepositeType.term: deposite = "Срочный сберегательный вклад"; break;
                 case DepositeType.accumulative: deposite = "Накопительный вклад"; break;
                 case DepositeType.call: deposite = "Вклад до вотребования"; break;
             }
-            return "ФИО: " + this.owner.surname + " " + this.owner.name + " " + this.owner.midname + Environment.NewLine +
-                "№" + this.number + Environment.NewLine +
-                "Номер паспорта: " + this.owner.passNumber + Environment.NewLine +
-                "Дата рождения: " + this.owner.birthDate + Environment.NewLine +
+            return "ФИО: " + this.Owner1.Surname + " " + this.Owner1.Name + " " + this.Owner1.Midname + Environment.NewLine +
+                "№" + this.Number + Environment.NewLine +
+                "Номер паспорта: " + this.Owner1.PassNumber + Environment.NewLine +
+                "Дата рождения: " + this.Owner1.BirthDate.ToShortDateString() + Environment.NewLine +
                 "Тип вклада: " + deposite + Environment.NewLine +
-                "Баланс: " + this.balance + Environment.NewLine +
-                "Дата создания: " + this.createDate + Environment.NewLine +
-                "СМС уведомления: " + (this.smsNotify ? "подключено" : "не подключено") + Environment.NewLine +
-                "Интернет-банкинг: " + (this.banking ? "подключено" : "не подключено") + Environment.NewLine;
+                "Баланс: " + this.Balance + Environment.NewLine +
+                "Дата создания: " + this.CreateDate + Environment.NewLine +
+                "СМС уведомления: " + (this.SmsNotify ? "подключено" : "не подключено") + Environment.NewLine +
+                "Интернет-банкинг: " + (this.Banking ? "подключено" : "не подключено") + Environment.NewLine;
         }
 
         public Account()
         {
-            number = count;
-            dType = 0;
-            balance = new Random().Next(1000) + 1000;
-            createDate = DateTime.Now;
-            smsNotify = true;
-            banking = true;
+            Number = count;
+            DType = 0;
+            Balance = new Random().Next(1000) + 1000;
+            CreateDate = DateTime.Now;
+            SmsNotify = true;
+            Banking = true;
         }
         public Account(XElement xe)
         {
-            owner = new Owner(xe.Element("owner").Element("name").Value, xe.Element("owner").Element("midname").Value, xe.Element("owner").Element("surname").Value, long.Parse(xe.Element("owner").Element("passNumber").Value), DateTime.Parse(xe.Element("owner").Element("birthDate").Value));
-            dType = (DepositeType)int.Parse(xe.Element("depositeType").Value);
-            balance = float.Parse(xe.Element("balance").Value);
-            smsNotify = bool.Parse(xe.Element("smsNotify").Value);
-            banking = bool.Parse(xe.Element("banking").Value);
-            number = long.Parse(xe.Element("number").Value);
-            createDate = DateTime.Parse(xe.Element("createDate").Value);
+            Owner1 = new Owner(xe.Element("owner").Element("name").Value, xe.Element("owner").Element("midname").Value, xe.Element("owner").Element("surname").Value, long.Parse(xe.Element("owner").Element("passNumber").Value), DateTime.Parse(xe.Element("owner").Element("birthDate").Value));
+            DType = (DepositeType)int.Parse(xe.Element("depositeType").Value);
+            Balance = float.Parse(xe.Element("balance").Value);
+            SmsNotify = bool.Parse(xe.Element("smsNotify").Value);
+            Banking = bool.Parse(xe.Element("banking").Value);
+            Number = long.Parse(xe.Element("number").Value);
+            CreateDate = DateTime.Parse(xe.Element("createDate").Value);
         }
         public Account(string _name, string _midname, string _surname, long _passNumber, DateTime _birthDate, int _dType, float _balance, bool _smsNotify, bool _banking, OperationType opType)
         {
-            owner = new Owner(_name, _midname, _surname, _passNumber, _birthDate);
-            number = count;
-            dType = (DepositeType)_dType;
-            balance = _balance;
-            createDate = DateTime.Now;
-            smsNotify = _smsNotify;
-            banking = _banking;
-            history = new History(_balance, opType);
+            Owner1 = new Owner(_name, _midname, _surname, _passNumber, _birthDate);
+            Number = count;
+            DType = (DepositeType)_dType;
+            Balance = _balance;
+            CreateDate = DateTime.Now;
+            SmsNotify = _smsNotify;
+            Banking = _banking;
+            History1 = new History(_balance, opType);
         }
 
         public static string AccountHistory(long passNumber)
         {
             XDocument xdoc = XDocument.Load(Account.mainFilePath);
+
             var items1 = from xe in xdoc.Element("ArrayOfAccount").Elements("account")
                          where (xe.Element("owner").Element("passNumber").Value.Equals(passNumber.ToString()))
                          select new Account
                          {
-                             history = new History(float.Parse(xe.Element("history").Element("sum").Value), (OperationType)int.Parse(xe.Element("history").Element("opType").Value), DateTime.Parse(xe.Element("history").Element("date").Value))
+                             History1 = new History(float.Parse(xe.Element("history").Element("sum").Value), (OperationType)int.Parse(xe.Element("history").Element("opType").Value), DateTime.Parse(xe.Element("history").Element("date").Value))
                          };
             if (items1.Count() == 0) throw new Exception("Счёт не найден");
             StringBuilder buffer = new StringBuilder();
             foreach (Account acc in items1)
             {
-                string buf = acc.history.operType.ToString() + " " + acc.history.sum + " " + acc.history.date + Environment.NewLine;
+                string buf = acc.History1.OperType.ToString() + " " + acc.History1.Sum + " " + acc.History1.Date + Environment.NewLine;
                 buffer.Insert(buffer.Length, buf);
             }
             return buffer.ToString();
@@ -146,7 +155,7 @@ namespace Lab2
                         case 0:
                             {
                                 items1 = from xe in xdoc.Element("ArrayOfAccount").Elements("account")
-                                         where xe.Element("number").Value.Equals(search1)
+                                         where (xe.Element("number").Value.Equals(search1))
                                          select new Account(xe);
                                 break;
                             }
@@ -183,11 +192,11 @@ namespace Lab2
                         case 1:
                             {
                                 string[] FIO = search1.Split(' ');
-                                items1 = items1.Where(n => (Matches(n.owner.surname, FIO[0]) && Matches(n.owner.name, FIO[1]) && Matches(n.owner.midname, FIO[2])));
+                                items1 = items1.Where(n => (Matches(n.Owner1.Surname, FIO[0]) && Matches(n.Owner1.Name, FIO[1]) && Matches(n.Owner1.Midname, FIO[2])));
                                 break;
                             }
-                        case 2: items1 = items1.Where(n => n.balance == float.Parse(search1)); break;
-                        case 3: items1 = items1.Where(n => n.dType.Equals((DepositeType)int.Parse(search1))); break;
+                        case 2: items1 = items1.Where(n => n.Balance == float.Parse(search1)); break;
+                        case 3: items1 = items1.Where(n => n.DType.Equals((DepositeType)int.Parse(search1))); break;
                     }
                 }
             }
@@ -200,9 +209,9 @@ namespace Lab2
             List<Account> items = XmlSerializeWrapper.Deserialize<List<Account>>(Account.mainFilePath);
             switch (ch)
             {
-                case 1: return items.OrderByDescending(n => n.createDate);
-                case 2: return items.OrderBy(n => n.createDate);
-                case 3: return items.OrderBy(n => n.dType);
+                case 1: return items.OrderByDescending(n => n.CreateDate);
+                case 2: return items.OrderBy(n => n.CreateDate);
+                case 3: return items.OrderBy(n => n.DType);
                 default: throw new Exception("Ошибка сортировки");
             }
         }
@@ -217,29 +226,34 @@ namespace Lab2
 
         public class History
         {
+            private DateTime date;
+            private OperationType operType;
+            private float sum;
+
             [XmlElement(ElementName = "date")]
-            public DateTime date;
+            public DateTime Date { get => date; set => date = value; }
             [XmlElement(ElementName = "opType")]
-            public OperationType operType;
+            public OperationType OperType { get => operType; set => operType = value; }
             [XmlElement(ElementName = "sum")]
-            public float sum;
+            public float Sum { get => sum; set => sum = value; }
+
             public History()
             {
-                sum = 0f;
-                operType = OperationType.deposit;
-                date = DateTime.Now;
+                Sum = 0f;
+                OperType = OperationType.deposit;
+                Date = DateTime.Now;
             }
             public History(float _count, OperationType _opType)
             {
-                sum = _count;
-                operType = _opType;
-                date = DateTime.Now;
+                Sum = _count;
+                OperType = _opType;
+                Date = DateTime.Now;
             }
             public History(float _count, OperationType _opType, DateTime _date)
             {
-                sum = _count;
-                operType = _opType;
-                date = _date;
+                Sum = _count;
+                OperType = _opType;
+                Date = _date;
             }
         }
 
@@ -248,38 +262,44 @@ namespace Lab2
         {
             Owner()
             {
-                name = "Ivan";
-                midname = "Ivanov";
-                surname = "Ivanovich";
-                passNumber = new Random().Next(900000) + 100000;
-                birthDate = DateTime.Now;
+                Name = "Ivan";
+                Midname = "Ivanov";
+                Surname = "Ivanovich";
+                PassNumber = new Random().Next(900000) + 100000;
+                BirthDate = DateTime.Now;
             }
             public Owner(string _name, string _midname, string _surname, long _passNumber, DateTime _birthDate)
             {
-                name = _name;
-                midname = _midname;
-                surname = _surname;
-                passNumber = _passNumber;
-                birthDate = _birthDate;
+                Name = _name;
+                Midname = _midname;
+                Surname = _surname;
+                PassNumber = _passNumber;
+                BirthDate = _birthDate;
             }
+            private string surname;
+            private string name;
+            private string midname;
+            private long passNumber;
+            private DateTime birthDate;
+
             [XmlElement(ElementName = "surname")]
             [Required(AllowEmptyStrings = false)]
             [RegularExpression(@"[a-zA-Z]+")]
-            public string surname { get; set; }
+            public string Surname { get => surname; set => surname = value; }
             [XmlElement(ElementName = "name")]
             [Required(AllowEmptyStrings = false)]
             [RegularExpression(@"[a-zA-Z]+")]
-            public string name { get; set; }
+            public string Name { get => name; set => name = value; }
             [XmlElement(ElementName = "midname")]
             [Required(AllowEmptyStrings = false)]
             [RegularExpression(@"[a-zA-Z]+")]
-            public string midname { get; set; }
+            public string Midname { get => midname; set => midname = value; }
             [Required]
             [Range(0, 10000000000)]
             [XmlElement(ElementName = "passNumber")]
-            public long passNumber { get; set; }
+            public long PassNumber { get => passNumber; set => passNumber = value; }
             [XmlElement(ElementName = "birthDate")]
-            public DateTime birthDate { get; set; }
+            public DateTime BirthDate { get => birthDate; set => birthDate = value; }
         }
 
         [Serializable]

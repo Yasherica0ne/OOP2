@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -28,6 +30,9 @@ namespace Lab2
             TextBox tb;
             fm1.count = new int[4];
             fm1.search = new List<string>();
+            if ((textBox7.Text != "") && Regex.IsMatch(textBox7.Text, "[^0-9]+")) throw new Exception("Поле номера должно состоять только из цифр");
+            if ((textBox8.Text != "") && Regex.IsMatch(textBox8.Text, "[^a-zA-Z ]+")) throw new Exception("Поле имени введено неверно");
+            if ((textBox9.Text != "") && Regex.IsMatch(textBox8.Text, "[^0-9.]+")) throw new Exception("Поле баланса введено неверно");
             for (int i = 0; i < controls.Count; i++)
             {
                 if (controls[i] is TextBox)
