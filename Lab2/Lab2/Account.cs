@@ -28,7 +28,7 @@ namespace Lab2
         private DateTime createDate;
         private bool smsNotify;
         private bool banking;
-        private Owner owner1;
+        private Owner owner1; 
         private History history1;
         [XmlElement(ElementName = "number")]
         public long Number { get => number; set => number = value; }

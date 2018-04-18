@@ -38,6 +38,8 @@ namespace Lab4
             }
         }
 
+        //public static long count { get; set; }
+
         //static TextSelection rbBuffer;
 
         private void LanguageChanged(Object sender, EventArgs e)
@@ -158,6 +160,11 @@ namespace Lab4
             if (dlg.ShowDialog() == true)
             {
                 window.Title = dlg.FileName;
+                if (History.Items.Count == 5)
+                {
+                    History.Items.RemoveAt(0);
+                }
+                History.Items.Add(dlg.FileName);
                 fileStream = new FileStream(dlg.FileName, FileMode.Open);
                 TextRange range = new TextRange(richTextBox.Document.ContentStart,
                     richTextBox.Document.ContentEnd);
@@ -184,7 +191,8 @@ namespace Lab4
         {
             string richText = new TextRange(richTextBox.Document.ContentStart,
                richTextBox.Document.ContentEnd).Text;
-            Count.Text = Convert.ToString(richText.Length);
+            //count = richText.Length - 2;
+            Count.Content = Convert.ToString(richText.Length - 2);
         }
 
         private void richTextBox_Drop(object sender, DragEventArgs e)
@@ -210,7 +218,7 @@ namespace Lab4
 
         private void New_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow richTextBoxWindow = new  MainWindow();
+            MainWindow richTextBoxWindow = new MainWindow();
             richTextBoxWindow.Title = "Window" + windowCount++;
             richTextBoxWindow.Show();
         }
@@ -242,6 +250,79 @@ namespace Lab4
             {
                 richTextBox.Selection.Text = "";
             }
+        }
+
+        private void richTextBox_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            if (!richTextBox.Selection.IsEmpty)
+            {
+                if ((richTextBox.Selection.GetPropertyValue(Run.FontWeightProperty) is FontWeight))
+                {
+                    BoldSt.IsChecked = (((FontWeight)
+                        richTextBox.Selection.GetPropertyValue(Run.FontWeightProperty))
+                        == FontWeights.Bold);
+                }
+                if ((richTextBox.Selection.GetPropertyValue(Run.FontStyleProperty) is FontStyle))
+                {
+                    ItalicSt.IsChecked = (((FontStyle)
+                        richTextBox.Selection.GetPropertyValue(Run.FontStyleProperty)) 
+                        == FontStyles.Italic);
+                }
+                if ((richTextBox.Selection.GetPropertyValue(Run.TextDecorationsProperty) is TextDecorationCollection))
+                {
+                    UnderlineSt.IsChecked = (((TextDecorationCollection)
+                        richTextBox.Selection.GetPropertyValue(Run.TextDecorationsProperty)) 
+                        == TextDecorations.Underline);
+                }
+                if ((richTextBox.Selection.GetPropertyValue(Run.FontFamilyProperty) is FontFamily))
+                {
+                    fontNameComBox.SelectedItem = (FontFamily)richTextBox.Selection.GetPropertyValue(Run.FontFamilyProperty);
+                }
+                if ((richTextBox.Selection.GetPropertyValue(Run.FontSizeProperty) is double))
+                {
+                    fontSizeComBox.SelectedItem = (double)richTextBox.Selection.GetPropertyValue(Run.FontSizeProperty);
+                }
+                if ((richTextBox.Selection.GetPropertyValue(Run.ForegroundProperty) is Brush))
+                {
+                    string color = ((Brush)richTextBox.Selection.GetPropertyValue(Run.ForegroundProperty)).ToString();
+                    switch (color)
+                    {
+                        case "#FF000000": fontColorComBox.SelectedIndex = 0; break;
+                        case "#FF008000": fontColorComBox.SelectedIndex = 1; break;
+                        case "#FFFFFF00": fontColorComBox.SelectedIndex = 2; break;
+                        case "#FFFF0000": fontColorComBox.SelectedIndex = 3; break;
+                        case "#FF0000FF": fontColorComBox.SelectedIndex = 4; break;
+                        case "#FFA52A2A": fontColorComBox.SelectedIndex = 5; break;
+                    }
+                }
+            }
+        }
+
+        private void History_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            fileStream = new FileStream(History.SelectedItem.ToString(), FileMode.Open);
+            TextRange range = new TextRange(richTextBox.Document.ContentStart,
+                richTextBox.Document.ContentEnd);
+            range.Load(fileStream, DataFormats.Rtf);
+            fileStream.Close();
+        }
+
+        private void Themes_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.Resources = new ResourceDictionary()
+            {
+                Source = new Uri("pack://application:,,,/Theme" + Convert.ToString(Themes.SelectedIndex) + ".xaml")
+            };
+        }
+
+        private void Undo_Click(object sender, RoutedEventArgs e)
+        {
+            richTextBox.Undo();
+        }
+
+        private void Redo_Click(object sender, RoutedEventArgs e)
+        {
+            richTextBox.Redo();
         }
 
         //private void ContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)

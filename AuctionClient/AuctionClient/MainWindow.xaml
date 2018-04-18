@@ -1,0 +1,60 @@
+﻿<Window x:Class="AuctionClient.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AuctionClient"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen" Title="MainWindow" Height="350" MinHeight="350" Width="525" MinWidth="525">
+    <Grid>
+        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Margin="0,30,0,29"/>
+        <StatusBar Height="24" VerticalAlignment="Bottom">
+            <TextBlock Text="{DynamicResource m_ActualLot}"/>
+            <TextBlock x:Name="ActualLot" Text="-"/>
+            <Separator Margin="0" Width="3"/>
+            <TextBlock Text="{DynamicResource m_ActualPrice}"/>
+            <TextBlock x:Name="ActualPrice" Text="-"/>
+            <Separator Margin="0" Width="3"/>
+            <TextBlock Text="{DynamicResource m_StartAuctionTime}"/>
+            <TextBlock x:Name="StartTime" Text="-"/>
+            <!--<Separator Margin="0" Width="3"/>
+            <TextBlock Text="{DynamicResource m_Lider}"/>
+            <TextBlock x:Name="Lider" Text="-"/>-->
+        </StatusBar>
+        <Separator Height="3" Background="DarkGray" Margin="0,0,0,26" VerticalAlignment="Bottom"/>
+        <Button x:Name="Auction" Click="Auction_Click" Content="{DynamicResource  m_Auction}" HorizontalAlignment="Left" Height="30" VerticalAlignment="Top" Width="100">
+            <Button.Style>
+                <Style TargetType="Button" >
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=Status, Path=Text}" Value="Auction">
+                            <Setter Property="IsEnabled" Value="False" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+        <Button x:Name="MyCab" Click="MyCab_Click" Content="{DynamicResource m_Cabinet}" HorizontalAlignment="Left" Height="30" VerticalAlignment="Top" Width="100" Margin="105,0,0,0">
+            <Button.Style>
+                <Style TargetType="Button" >
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=Status, Path=Text}" Value="Cabinet">
+                            <Setter Property="IsEnabled" Value="False" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+        <Button x:Name="AdminP" Click="AdminPanel_Click" Visibility="Collapsed" Content="{DynamicResource m_AdminPanel}" HorizontalAlignment="Left" Height="30" VerticalAlignment="Top" Width="100" Margin="210,0,0,0">
+            <Button.Style>
+                <Style TargetType="Button" >
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=Status, Path=Text}" Value="Admin">
+                            <Setter Property="IsEnabled" Value="False" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+        <TextBlock Name="Status" HorizontalAlignment="Left" Height="24" Margin="-89,47,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="25"/>
+    </Grid>
+</Window>

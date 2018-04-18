@@ -5,34 +5,50 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lab4"
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Name="window" Icon="icons/icon.ico"  
-        mc:Ignorable="d" WindowStartupLocation="CenterScreen" AllowDrop="True" MinWidth="490" MinHeight="350"
-        Title="MainWindow" Height="350" Width="500">
-    <Grid>
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen" AllowDrop="True" MinWidth="535" MinHeight="350"
+        Title="MainWindow" Height="357" Width="535">
+    <Window.Resources>
+        
+        <Style x:Key="MyStyleBothBorders" BasedOn="{x:Null}" TargetType="{x:Type RichTextBox}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RichTextBox}">
+                        <Border x:Name="bg" BorderBrush="PapayaWhip" BorderThickness="5" Background="{TemplateBinding Background}">
+                            <ScrollViewer x:Name="PART_ContentHost"  IsDeferredScrollingEnabled="True" CanContentScroll="False" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid Style="{DynamicResource buttonBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="453*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <RichTextBox x:Name="richTextBox" Margin="10,35,10,24" AllowDrop="True" Drop="richTextBox_Drop" TextChanged="richTextBox_TextChanged" Grid.ColumnSpan="2" >
+        <RichTextBox x:Name="richTextBox" Style="{StaticResource MyStyleBothBorders}" Margin="10,35,10,51" SelectionChanged="richTextBox_SelectionChanged" AllowDrop="True" Drop="richTextBox_Drop" TextChanged="richTextBox_TextChanged" >
             <RichTextBox.ContextMenu>
                 <ContextMenu>
                     <MenuItem Name="Cut" Header="{DynamicResource m_Cut}" Click="Cut_Click"></MenuItem>
                     <MenuItem Name="Copy" Header="{DynamicResource m_Copy}" Click="Copy_Click"></MenuItem>
                     <MenuItem Name="Paste" Header="{DynamicResource m_Paste}" Click="Paste_Click"></MenuItem>
                     <MenuItem Name="Delete" Header="{DynamicResource m_Delete}" Click="Delete_Click"></MenuItem>
+                    <MenuItem Name="Undo" Header="Undo" Click="Undo_Click"></MenuItem>
+                    <MenuItem Name="Redo" Header="Redo" Click="Redo_Click"></MenuItem>
                 </ContextMenu>
             </RichTextBox.ContextMenu>
         </RichTextBox>
         <Menu  Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="45">
-            <MenuItem Header="{DynamicResource m_File}" Height="25" Width="45" Margin="0, 2, 0, 0">
-                <MenuItem Name="New" Header="{DynamicResource m_New}" Click="New_Click"/>
+            <MenuItem Header="{DynamicResource m_File}" Height="25" Width="45">
+                <MenuItem x:Name="New" Header="{DynamicResource m_New}" Click="New_Click"/>
                 <MenuItem Header="{DynamicResource m_Open}" Click="File_Click"/>
                 <Separator />
                 <MenuItem x:Name="Exit" Header="{DynamicResource m_Exit}" Click="Exit_Click"/>
             </MenuItem>
         </Menu>
-        <ToolBar  Height="30" VerticalAlignment="Top" Margin="45,0,0,0">
+        <ToolBar  Height="30" VerticalAlignment="Top" Margin="45,0,0,0" Background="#FFB7DCBB">
             <Button x:Name="Save" Click="Save_Click" Content="{DynamicResource m_Save}" />
             <Separator Width="3"/>
             <ToggleButton x:Name="BoldSt" Checked="BoldSt_Checked" Unchecked="BoldSt_Unchecked">
@@ -84,12 +100,57 @@
                     <Image x:Name="Brown" Source="icons\BrownCol.png" Stretch="Fill"/>
                 </ComboBoxItem>
             </ComboBox>
+            <ComboBox Name="Themes" Height="30" Margin="0,0,0,-5" VerticalAlignment="Top" SelectedIndex="0" SelectionChanged="Themes_SelectionChanged" Width="71">
+                <ComboBoxItem Content="Default"/>
+                <ComboBoxItem Content="Theme 1"/>
+                <ComboBoxItem Content="Theme 2"/>
+            </ComboBox>
         </ToolBar>
-        <StatusBar Margin="10,0,150,3" Height="20" VerticalAlignment="Bottom">
-            <TextBlock><Run Text="{DynamicResource m_Count}"/></TextBlock>
-            <TextBlock x:Name="Count"><Run Text="0"/></TextBlock>
+
+        <StatusBar Margin="10,0,150,7" Height="23" VerticalAlignment="Bottom">
+            <StatusBarItem Content="{DynamicResource m_Count}"/>
+            <StatusBarItem x:Name="Count" Content="0">
+                <StatusBarItem.Style>
+                    <Style TargetType="StatusBarItem" >
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=Count, Path=Content}" Value="0">
+                                <Setter Property="Foreground" Value="Red" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StatusBarItem.Style>
+            </StatusBarItem>
         </StatusBar>
-        <ComboBox x:Name="menuLanguage" SelectedIndex="0" Margin="0,0,10,0" Height="24" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="140">
-        </ComboBox>
+        <ComboBox x:Name="menuLanguage" SelectedIndex="0" VerticalAlignment="Bottom" Margin="0,0,10,7" Height="25" HorizontalAlignment="Right" Width="160"/>
+        <Button Content="Анимация"  Width="100" HorizontalAlignment="Left" Height="21" VerticalAlignment="Bottom" Margin="10,0,0,30" >
+            <Button.Style>
+                <Style TargetType="Button" >
+                    <Style.Triggers>
+                        <MultiTrigger>
+                            <!--Список условий-->
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition Property="IsPressed" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <!--Список изменений, которые вступят в силу, если все условия выполнятся-->
+                            <MultiTrigger.Setters>
+                                <Setter Property="Foreground" Value="Red" />
+                                <Setter Property="FontSize" Value="16"/>
+                            </MultiTrigger.Setters>
+                        </MultiTrigger>
+                        <EventTrigger RoutedEvent="Click">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0:0:0.3" Storyboard.TargetProperty="Width" To="200" AutoReverse="True" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+        <ComboBox Name="History" Height="25" Margin="0,0,175,7" SelectedIndex="0" SelectionChanged="History_SelectionChanged" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="160"/>
     </Grid>
 </Window>
