@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lab4"
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Name="window" Icon="icons/icon.ico"  
-        mc:Ignorable="d" WindowStartupLocation="CenterScreen" AllowDrop="True" MinWidth="535" MinHeight="350"
-        Title="MainWindow" Height="357" Width="535">
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen" AllowDrop="True" MinWidth="545" MinHeight="350"
+        Title="MainWindow" Height="357" Width="545">
     <Window.Resources>
         
         <Style x:Key="MyStyleBothBorders" BasedOn="{x:Null}" TargetType="{x:Type RichTextBox}">
@@ -48,7 +48,8 @@
                 <MenuItem x:Name="Exit" Header="{DynamicResource m_Exit}" Click="Exit_Click"/>
             </MenuItem>
         </Menu>
-        <ToolBar  Height="30" VerticalAlignment="Top" Margin="45,0,0,0" Background="#FFB7DCBB">
+        <ToolBar  Height="30" VerticalAlignment="Top" Margin="42
+                  ,0,0,0" Background="#FFB7DCBB">
             <Button x:Name="Save" Click="Save_Click" Content="{DynamicResource m_Save}" />
             <Separator Width="3"/>
             <ToggleButton x:Name="BoldSt" Checked="BoldSt_Checked" Unchecked="BoldSt_Unchecked">
@@ -61,8 +62,8 @@
                 <Image Source="icons/U.png" Stretch="Fill"/>
             </ToggleButton>
             <Separator Width="3" />
-            <ComboBox x:Name="fontNameComBox" Margin="4,0,0,0" VerticalAlignment="Center" Width="120" SelectedIndex="0" MinHeight="32" HorizontalAlignment="Center" ItemsSource="{Binding Source={x:Static Fonts.SystemFontFamilies}}" SelectionChanged="fontNameComBox_SelectionChanged" />
-            <ComboBox x:Name="fontSizeComBox" Margin="0,-4,0,-3" VerticalAlignment="Center" Width="80" SelectedIndex="2" MinHeight="32" SelectionChanged="fontSizeComBox_SelectionChanged">
+            <ComboBox x:Name="fontNameComBox"  VerticalAlignment="Center" Width="120" SelectedIndex="0" MinHeight="32" HorizontalAlignment="Center" ItemsSource="{Binding Source={x:Static Fonts.SystemFontFamilies}}" SelectionChanged="fontNameComBox_SelectionChanged" />
+            <ComboBox x:Name="fontSizeComBox" VerticalAlignment="Center" Width="80" SelectedIndex="2" MinHeight="32" SelectionChanged="fontSizeComBox_SelectionChanged">
                 <System:Double>6</System:Double>
                 <System:Double>7</System:Double>
                 <System:Double>8</System:Double>
@@ -80,7 +81,7 @@
                 <System:Double>48</System:Double>
                 <System:Double>72</System:Double>
             </ComboBox>
-            <ComboBox x:Name="fontColorComBox" Margin="0,-4,0,-3" VerticalAlignment="Center" Width="49" SelectedIndex="0" MinHeight="32" SelectionChanged="fontColorComBox_SelectionChanged">
+            <ComboBox x:Name="fontColorComBox"  VerticalAlignment="Center" Width="49" SelectedIndex="0" MinHeight="32" SelectionChanged="fontColorComBox_SelectionChanged">
                 <ComboBoxItem>
                     <Image x:Name="Black" Source="icons\BlackCol.png" Stretch="Fill"/>
                 </ComboBoxItem>
@@ -100,7 +101,7 @@
                     <Image x:Name="Brown" Source="icons\BrownCol.png" Stretch="Fill"/>
                 </ComboBoxItem>
             </ComboBox>
-            <ComboBox Name="Themes" Height="30" Margin="0,0,0,-5" VerticalAlignment="Top" SelectedIndex="0" SelectionChanged="Themes_SelectionChanged" Width="71">
+            <ComboBox Name="Themes" Height="30"  VerticalAlignment="Top" SelectedIndex="0" SelectionChanged="Themes_SelectionChanged" Width="71">
                 <ComboBoxItem Content="Default"/>
                 <ComboBoxItem Content="Theme 1"/>
                 <ComboBoxItem Content="Theme 2"/>

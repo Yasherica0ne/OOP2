@@ -18,4 +18,5 @@ namespace AuctionServer
         public DbSet<Product> Products { get => products; set => products = value; }
         public DbSet<Trade> Trades { get => trades; set => trades = value; }
     }
+
 }
